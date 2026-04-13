@@ -5,15 +5,24 @@ site_name="${SITE_NAME:-example.local}"
 site_type="${SITE_TYPE:-generic}"
 out_file="/usr/share/nginx/html/index.html"
 
+escape_sed_replacement() {
+  printf '%s' "$1" | sed 's/[&|\\]/\\&/g'
+}
+
+write_template() {
+  escaped_site_name="$(escape_sed_replacement "$site_name")"
+  sed "s|__SITE_NAME__|$escaped_site_name|g" > "$out_file"
+}
+
 case "$site_type" in
   shopping)
-    cat > "$out_file" <<EOF
+    write_template <<'EOF'
 <!doctype html>
 <html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${site_name}</title>
+  <title>__SITE_NAME__</title>
   <style>
     :root { --bg:#fff8f1; --accent:#d9480f; --card:#ffffff; --text:#2b2b2b; }
     body { font-family: "Trebuchet MS", sans-serif; background: radial-gradient(circle at top,#ffe8cc,var(--bg)); color: var(--text); margin: 0; }
@@ -25,7 +34,7 @@ case "$site_type" in
 </head>
 <body>
   <div class="wrap">
-    <h1>${site_name}</h1>
+    <h1>__SITE_NAME__</h1>
     <p>Spring Sale picks and trending products.</p>
     <div class="grid">
       <div class="card"><h3>Wireless Headphones</h3><p class="price">$79</p></div>
@@ -40,13 +49,13 @@ case "$site_type" in
 EOF
     ;;
   social)
-    cat > "$out_file" <<EOF
+    write_template <<'EOF'
 <!doctype html>
 <html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${site_name}</title>
+  <title>__SITE_NAME__</title>
   <style>
     :root { --bg:#eef6ff; --accent:#0b7285; --card:#ffffff; --text:#1f2a37; }
     body { font-family: "Verdana", sans-serif; background: linear-gradient(180deg,#dbeafe,var(--bg)); color:var(--text); margin:0; }
@@ -57,7 +66,7 @@ EOF
 </head>
 <body>
   <div class="wrap">
-    <h1>${site_name}</h1>
+    <h1>__SITE_NAME__</h1>
     <div class="post"><strong>@sam</strong><p>Launching our new community meetup this weekend.</p><div class="meta">14 likes • 3 comments</div></div>
     <div class="post"><strong>@dina</strong><p>Photo walk recap: downtown murals and coffee spots.</p><div class="meta">29 likes • 8 comments</div></div>
     <div class="post"><strong>@leo</strong><p>Who is joining the live coding stream tonight?</p><div class="meta">9 likes • 2 comments</div></div>
@@ -68,13 +77,13 @@ EOF
 EOF
     ;;
   news)
-    cat > "$out_file" <<EOF
+    write_template <<'EOF'
 <!doctype html>
 <html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${site_name}</title>
+  <title>__SITE_NAME__</title>
   <style>
     :root { --bg:#f8f9fa; --accent:#1d3557; --text:#212529; --card:#ffffff; }
     body { font-family: Georgia, serif; background: var(--bg); color: var(--text); margin: 0; }
@@ -85,7 +94,7 @@ EOF
 </head>
 <body>
   <div class="wrap">
-    <h1>${site_name}</h1>
+    <h1>__SITE_NAME__</h1>
     <div class="headline">City Council Approves Transit Expansion Plan</div>
     <div class="story"><strong>World:</strong> Leaders meet for climate policy summit.</div>
     <div class="story"><strong>Tech:</strong> Open-source tools gain momentum in enterprise.</div>
@@ -97,13 +106,13 @@ EOF
 EOF
     ;;
   email)
-    cat > "$out_file" <<EOF
+    write_template <<'EOF'
 <!doctype html>
 <html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${site_name}</title>
+  <title>__SITE_NAME__</title>
   <style>
     :root { --bg:#f3f7ff; --panel:#ffffff; --accent:#364fc7; --text:#20262e; }
     body { font-family: "Tahoma", sans-serif; background: var(--bg); color: var(--text); margin: 0; }
@@ -115,7 +124,7 @@ EOF
 </head>
 <body>
   <div class="app">
-    <aside class="sidebar"><h2>${site_name}</h2><p>Inbox</p><p>Sent</p><p>Drafts</p></aside>
+    <aside class="sidebar"><h2>__SITE_NAME__</h2><p>Inbox</p><p>Sent</p><p>Drafts</p></aside>
     <main class="mail">
       <div class="item"><strong>Welcome</strong><p>Your account is ready to use.</p></div>
       <div class="item"><strong>Team Update</strong><p>Project milestone reached this morning.</p></div>
@@ -128,13 +137,13 @@ EOF
 EOF
     ;;
   forum)
-    cat > "$out_file" <<EOF
+    write_template <<'EOF'
 <!doctype html>
 <html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${site_name}</title>
+  <title>__SITE_NAME__</title>
   <style>
     :root { --bg:#f5f3ff; --card:#ffffff; --accent:#5f3dc4; --muted:#6b7280; --text:#1f1f2e; }
     body { margin:0; font-family:"Segoe UI", sans-serif; background:linear-gradient(180deg,#ede9fe,var(--bg)); color:var(--text); }
@@ -146,7 +155,7 @@ EOF
 </head>
 <body>
   <div class="wrap">
-    <h1>${site_name}</h1>
+    <h1>__SITE_NAME__</h1>
     <div class="thread"><span class="tag">Announcements</span><strong>Welcome to the community forum</strong><p class="meta">Posted by admin • 12 replies</p></div>
     <div class="thread"><span class="tag">Support</span><strong>How do I configure SSL certificates?</strong><p class="meta">Posted by alex • 6 replies</p></div>
     <div class="thread"><span class="tag">General</span><strong>Show us your latest project setup</strong><p class="meta">Posted by maya • 21 replies</p></div>
@@ -157,13 +166,13 @@ EOF
 EOF
     ;;
   *)
-    cat > "$out_file" <<EOF
+    write_template <<'EOF'
 <!doctype html>
 <html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${site_name}</title>
+  <title>__SITE_NAME__</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 30px; background: #f8f9fa; }
     .card { max-width: 680px; background: #fff; padding: 18px; border-radius: 10px; box-shadow: 0 8px 18px rgba(0,0,0,.08); }
@@ -171,7 +180,7 @@ EOF
 </head>
 <body>
   <div class="card">
-    <h1>${site_name}</h1>
+    <h1>__SITE_NAME__</h1>
     <p>Generic placeholder page.</p>
     <p>Trusted certs loaded from ./certs</p>
   </div>
