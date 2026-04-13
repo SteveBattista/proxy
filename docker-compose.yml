@@ -1,0 +1,85 @@
+services:
+  npm:
+    build:
+      context: .
+      dockerfile: docker/npm/Dockerfile
+    container_name: npm-proxy-manager
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "80:80"
+      - "81:81"
+      - "443:443"
+    volumes:
+      - npm_data:/data
+      - npm_letsencrypt:/etc/letsencrypt
+
+  web1:
+    build:
+      context: .
+      dockerfile: docker/website/Dockerfile
+      args:
+        SITE_NAME: Shopping
+        SITE_TYPE: shopping
+    container_name: shopping
+    hostname: shopping
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+
+  web2:
+    build:
+      context: .
+      dockerfile: docker/website/Dockerfile
+      args:
+        SITE_NAME: Social Media
+        SITE_TYPE: social
+    container_name: social-media
+    hostname: social-media
+    restart: unless-stopped
+    ports:
+      - "8082:80"
+
+  web3:
+    build:
+      context: .
+      dockerfile: docker/website/Dockerfile
+      args:
+        SITE_NAME: News
+        SITE_TYPE: news
+    container_name: news
+    hostname: news
+    restart: unless-stopped
+    ports:
+      - "8083:80"
+
+  web4:
+    build:
+      context: .
+      dockerfile: docker/website/Dockerfile
+      args:
+        SITE_NAME: Email
+        SITE_TYPE: email
+    container_name: email
+    hostname: email
+    restart: unless-stopped
+    ports:
+      - "8084:80"
+
+  web5:
+    build:
+      context: .
+      dockerfile: docker/website/Dockerfile
+      args:
+        SITE_NAME: Forum
+        SITE_TYPE: forum
+    container_name: forum
+    hostname: forum
+    restart: unless-stopped
+    ports:
+      - "8085:80"
+
+volumes:
+  npm_data:
+  npm_letsencrypt:
