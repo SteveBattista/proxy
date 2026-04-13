@@ -5,8 +5,6 @@ services:
       dockerfile: docker/npm/Dockerfile
     container_name: npm-proxy-manager
     restart: unless-stopped
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     ports:
       - "80:80"
       - "81:81"
@@ -83,3 +81,4 @@ services:
 volumes:
   npm_data:
   npm_letsencrypt:
+
