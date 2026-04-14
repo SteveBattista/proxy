@@ -11,6 +11,7 @@ This stack creates:
 - `docker-compose.yml`
 - `docker/npm/Dockerfile`
 - `docker/website/Dockerfile`
+- `setup-hosts.sh` (script to configure `/etc/hosts`)
 - `certs/` (put your `.crt` CA cert files here)
 
 ## Add certificates
@@ -24,6 +25,24 @@ Example:
 cp my-company-root-ca.crt certs/
 ```
 
+## Configure hosts file
+
+To access the websites via custom domain names (`*.testlaboratory.cc`), run the provided script:
+
+```bash
+sudo ./setup-hosts.sh
+```
+
+This will add the following entries to `/etc/hosts`:
+
+- `shopping.testlaboratory.cc`
+- `social-media.testlaboratory.cc`
+- `news.testlaboratory.cc`
+- `email.testlaboratory.cc`
+- `forum.testlaboratory.cc`
+
+A backup of your hosts file will be created automatically.
+
 ## Build and run
 
 ```bash
@@ -33,11 +52,11 @@ docker compose up -d --build
 ## Access
 
 - Nginx Proxy Manager UI: `http://localhost:81`
-- Shopping: `http://localhost:8081`
-- Social Media: `http://localhost:8082`
-- News: `http://localhost:8083`
-- Email: `http://localhost:8084`
-- Forum: `http://localhost:8085`
+- Shopping: `http://localhost:8081` or `http://shopping.testlaboratory.cc` (after configuring hosts)
+- Social Media: `http://localhost:8082` or `http://social-media.testlaboratory.cc` (after configuring hosts)
+- News: `http://localhost:8083` or `http://news.testlaboratory.cc` (after configuring hosts)
+- Email: `http://localhost:8084` or `http://email.testlaboratory.cc` (after configuring hosts)
+- Forum: `http://localhost:8085` or `http://forum.testlaboratory.cc` (after configuring hosts)
 
 ## NPM upstream targets
 
